@@ -6,8 +6,9 @@ const {
   updatePredictionResult
 } = require('../controllers/predictionController');
 
-router.post('/', createPrediction);
-router.get('/:userId', getPredictionsByUser);
+// Rutas específicas primero
 router.put('/result/:predictionId', updatePredictionResult);
+router.get('/user/:userId', getPredictionsByUser); // ← CAMBIADO: /user/:userId
+router.post('/', createPrediction);
 
 module.exports = router;

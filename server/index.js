@@ -1,30 +1,30 @@
-require('dotenv').config();
-console.log('✅ dotenv cargado');
-
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
-const connectDB = require('./config/db');
-const predictionRoutes = require('./routes/predictionRoutes');
-
-
-console.log('✅ módulos importados');
+require('dotenv').config();
 
 const app = express();
+
+// ✅ Middleware primero
 app.use(cors());
 app.use(express.json());
 
-console.log('✅ middlewares aplicados');
+// ✅ Rutas después del middleware
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/matches', require('./routes/matchRoutes'));
+app.use('/api/predict', require('./routes/predictionRoutes'));
 
-connectDB();
-
-app.use('/api/predictions', predictionRoutes);
-const userRoutes = require('./routes/userRoutes');
-app.use('/api/users', userRoutes);
-const matchRoutes = require('./routes/matchRoutes');
-app.use('/api/matches', matchRoutes);
-
-console.log('✅ rutas cargadas');
-
-app.listen(5000, () => {
-  console.log('🚀 Servidor corriendo en puerto 5000');
+// ✅ Conexión a MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+  console.log('Conectado a MongoDB');
+  app.listen(process.env.PORT || 5000, () => {
+    console.log(`Servidor corriendo en puerto ${process.env.PORT || 5000}`);
+  });
+})
+.catch((error) => {
+  console.error('Error al conectar a MongoDB:', error);
 });

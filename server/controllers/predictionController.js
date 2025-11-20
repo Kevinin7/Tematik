@@ -13,8 +13,18 @@ const createPrediction = async (req, res) => {
 const getPredictionsByUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const predictions = await Prediction.find({ user: userId }).populate('matchId');
-    res.json(predictions);
+    const predictions = await Prediction.find({ user: userId }).populate('matchId').lean();
+
+    const formatted = predictions.map(p => ({
+      id: p._id, // ← esto expone el ID como "id"
+      matchId: p.matchId,
+      predictedScore: p.predictedScore,
+      actualScore: p.actualScore,
+      pointsEarned: p.pointsEarned,
+      createdAt: p.createdAt
+    }));
+
+    res.json(formatted);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener predicciones del usuario' });
   }

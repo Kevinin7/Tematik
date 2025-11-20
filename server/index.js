@@ -3,16 +3,20 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
+const userRoutes = require('./routes/userRoutes');
+const matchRoutes = require('./routes/matchRoutes');
+const predictionRoutes = require('./routes/predictionRoutes');
+
 const app = express();
 
-// ✅ Middleware primero
+// ✅ Middlewares primero
 app.use(cors());
 app.use(express.json());
 
-// ✅ Rutas después del middleware
-app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/matches', require('./routes/matchRoutes'));
-app.use('/api/predict', require('./routes/predictionRoutes'));
+// ✅ Rutas después de los middlewares
+app.use('/api/users', userRoutes);
+app.use('/api/matches', matchRoutes);
+app.use('/api/predict', predictionRoutes);
 
 // ✅ Conexión a MongoDB
 mongoose.connect(process.env.MONGO_URI, {

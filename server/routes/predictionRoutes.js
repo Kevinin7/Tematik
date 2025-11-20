@@ -8,7 +8,7 @@ const {
 
 // Rutas específicas primero
 router.put('/result/:predictionId', updatePredictionResult);
-router.get('/user/:userId', getPredictionsByUser); // ← CAMBIADO: /user/:userId
-router.post('/', createPrediction);
+router.get('/user/:userId', getPredictionsByUser);
+router.post('/', createPrediction); // ← ESTA ES LA RUTA QUE FALTABA
 
 module.exports = router;
